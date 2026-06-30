@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prospyr Business Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app" class="hidden">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1 class="logo">Prospyr <span>Business Manager</span></h1>
+            </div>
+            <div class="header-right">
+                <button id="closeBtn" class="btn btn-icon" title="Close (ESC)">✕</button>
+            </div>
+        </header>
+
+        <!-- Tab Navigation -->
+        <nav class="tabs">
+            <button class="tab active" data-tab="businesses">My Businesses</button>
+            <button class="tab" data-tab="employees">Employees</button>
+            <button class="tab" data-tab="finance">Finance</button>
+            <button class="tab" data-tab="create">Create Business</button>
+            <button class="tab tab-admin hidden" data-tab="admin">Admin Panel</button>
+        </nav>
+
+        <!-- Tab: Businesses -->
+        <div class="tab-content active" id="tab-businesses">
+            <div class="business-list" id="businessList">
+                <div class="empty-state">
+                    <p>No businesses yet. Create one in the "Create Business" tab.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Employees -->
+        <div class="tab-content" id="tab-employees">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Employee Management</h2>
+                    <button id="hireBtn" class="btn btn-primary">+ Hire Employee</button>
+                </div>
+                <table class="data-table" id="employeeTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Salary</th>
+                            <th>Hired</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeeTableBody">
+                        <tr class="empty-row"><td colspan="5">Select a business first.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab: Finance -->
+        <div class="tab-content" id="tab-finance">
+            <div class="finance-grid">
+                <div class="finance-card">
+                    <h3>Current Balance</h3>
+                    <p class="balance" id="currentBalance">$0.00</p>
+                </div>
+                <div class="finance-card">
+                    <h3>Total Revenue</h3>
+                    <p class="stat-positive" id="totalRevenue">$0.00</p>
+                </div>
+                <div class="finance-card">
+                    <h3>Total Expenses</h3>
+                    <p class="stat-negative" id="totalExpenses">$0.00</p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Actions</h2>
+                </div>
+                <div class="action-row">
+                    <div class="input-group">
+                        <input type="number" id="amountInput" placeholder="Amount ($)" min="0" step="0.01">
+                        <input type="text" id="descInput" placeholder="Description (optional)">
+                    </div>
+                    <button id="depositBtn" class="btn btn-success">Deposit</button>
+                    <button id="withdrawBtn" class="btn btn-danger">Withdraw</button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Transaction History</h2>
+                </div>
+                <table class="data-table" id="transactionTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Description</th>
+                            <th>By</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionTableBody">
+                        <tr class="empty-row"><td colspan="5">No transactions yet.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab: Create Business -->
+        <div class="tab-content" id="tab-create">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Create New Business</h2>
+                </div>
+                <form id="createBusinessForm" class="form-grid">
+                    <div class="form-group">
+                        <label for="bizName">Business Name</label>
+                        <input type="text" id="bizName" placeholder="e.g., Downtown Diner" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bizType">Business Type</label>
+                        <select id="bizType">
+                            <!-- Populated via JS -->
+                        </select>
+                    </div>
+                    <div class="form-group full">
+                        <p class="form-info">A blip will be placed at your current location.</p>
+                    </div>
+                    <div class="form-group full">
+                        <button type="submit" class="btn btn-primary">Create Business</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tab: Admin -->
+        <div class="tab-content" id="tab-admin">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>All Businesses (Admin)</h2>
+                    <button id="refreshAdminBtn" class="btn btn-secondary">↻ Refresh</button>
+                </div>
+                <table class="data-table" id="adminTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Owner</th>
+                            <th>Balance</th>
+                            <th>Employees</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableBody">
+                        <tr class="empty-row"><td colspan="7">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hire Dialog Modal -->
+    <div id="hireModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Hire Employee</h3>
+                <button class="btn btn-icon" onclick="closeHireModal()">✕</button>
+            </div>
+            <form id="hireForm" class="form-grid">
+                <div class="form-group">
+                    <label for="hireName">Player Name</label>
+                    <input type="text" id="hireName" placeholder="In-game name" required>
+                </div>
+                <div class="form-group">
+                    <label for="hireCid">Citizen ID</label>
+                    <input type="text" id="hireCid" placeholder="License/identifier" required>
+                </div>
+                <div class="form-group">
+                    <label for="hireRole">Role</label>
+                    <select id="hireRole"></select>
+                </div>
+                <div class="form-group">
+                    <label for="hireSalary">Salary ($)</label>
+                    <input type="number" id="hireSalary" placeholder="100" min="0" step="1">
+                </div>
+                <div class="form-group full">
+                    <button type="submit" class="btn btn-primary">Hire</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

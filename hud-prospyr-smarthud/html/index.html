@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prospyr SmartHUD</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ═══ HUD CONTAINER ═══ -->
+    <div id="hud-container">
+        <!-- Status Bars -->
+        <div id="status-bars" class="hud-element">
+            <div class="bar-group" data-type="health">
+                <span class="bar-label">HP</span>
+                <div class="bar-track"><div class="bar-fill" id="bar-health"></div></div>
+            </div>
+            <div class="bar-group" data-type="armor">
+                <span class="bar-label">AR</span>
+                <div class="bar-track"><div class="bar-fill" id="bar-armor"></div></div>
+            </div>
+            <div class="bar-group" data-type="stamina">
+                <span class="bar-label">STA</span>
+                <div class="bar-track"><div class="bar-fill" id="bar-stamina"></div></div>
+            </div>
+            <div class="bar-group" data-type="hunger">
+                <span class="bar-label">HUN</span>
+                <div class="bar-track"><div class="bar-fill" id="bar-hunger"></div></div>
+            </div>
+            <div class="bar-group" data-type="thirst">
+                <span class="bar-label">THI</span>
+                <div class="bar-track"><div class="bar-fill" id="bar-thirst"></div></div>
+            </div>
+        </div>
+
+        <!-- Money Display -->
+        <div id="money-display" class="hud-element">
+            <div class="money-item" id="cash-display">
+                <span class="money-icon">$</span>
+                <span class="money-label">CASH</span>
+                <span class="money-value" id="money-cash">0</span>
+            </div>
+            <div class="money-item" id="bank-display">
+                <span class="money-icon">🏦</span>
+                <span class="money-label">BANK</span>
+                <span class="money-value" id="money-bank">0</span>
+            </div>
+        </div>
+
+        <!-- Voice Indicator -->
+        <div id="voice-indicator" class="hud-element">
+            <div class="voice-icon" id="voice-icon">🎙</div>
+            <div class="voice-range" id="voice-range-text">Normal</div>
+        </div>
+
+        <!-- Vehicle Speedometer -->
+        <div id="vehicle-hud" class="hud-element hidden">
+            <div class="speedo-container">
+                <div class="speed-main">
+                    <span class="speed-value" id="vehicle-speed">0</span>
+                    <span class="speed-unit" id="vehicle-unit">MPH</span>
+                </div>
+                <div class="speedo-secondary">
+                    <div class="speedo-item">
+                        <span class="speedo-label">Gear</span>
+                        <span class="speedo-value" id="vehicle-gear">N</span>
+                    </div>
+                    <div class="speedo-item">
+                        <span class="speedo-label">Fuel</span>
+                        <div class="fuel-bar"><div class="fuel-fill" id="vehicle-fuel"></div></div>
+                    </div>
+                    <div class="speedo-item">
+                        <span class="speedo-label">Dmg</span>
+                        <span class="speedo-value" id="vehicle-damage">100%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SETTINGS PANEL ═══ -->
+    <div id="settings-panel" class="hidden">
+        <div class="settings-header">
+            <h1>Prospyr SmartHUD — Settings</h1>
+            <button class="settings-close" id="close-btn">&times;</button>
+        </div>
+
+        <div class="settings-body">
+            <!-- Element Toggles -->
+            <div class="settings-section">
+                <h2>Display Elements</h2>
+                <div class="toggle-grid">
+                    <label class="toggle-item">
+                        <input type="checkbox" id="toggle-health" data-element="Health">
+                        <span>Health</span>
+                    </label>
+                    <label class="toggle-item">
+                        <input type="checkbox" id="toggle-armor" data-element="Armor">
+                        <span>Armor</span>
+                    </label>
+                    <label class="toggle-item">
+                        <input type="checkbox" id="toggle-stamina" data-element="Stamina">
+                        <span>Stamina</span>
+                    </label>
+                    <label class="toggle-item">
+                        <input type="checkbox" id="toggle-hunger" data-element="Hunger">
+                        <span>Hunger</span>
+                    </label>
+                    <label class="toggle-item">
+                        <input type="checkbox" id="toggle-thirst" data-element="Thirst">
+                        <span>Thirst</span>
+                    </label>
+                    <label class="toggle-item">
+                        <input type="checkbox" id="toggle-money" data-element="Money">
+                        <span>Money</span>
+                    </label>
+                    <label class="toggle-item">
+                        <input type="checkbox" id="toggle-voice" data-element="Voice">
+                        <span>Voice</span>
+                    </label>
+                    <label class="toggle-item">
+                        <input type="checkbox" id="toggle-vehicle" data-element="Vehicle">
+                        <span>Vehicle</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Theme Colors -->
+            <div class="settings-section">
+                <h2>Theme Colors</h2>
+                <div class="color-grid">
+                    <label class="color-item">
+                        <span>Primary</span>
+                        <input type="color" id="color-primary" data-colorkey="primary">
+                    </label>
+                    <label class="color-item">
+                        <span>Background</span>
+                        <input type="color" id="color-background" data-colorkey="background">
+                    </label>
+                    <label class="color-item">
+                        <span>Text</span>
+                        <input type="color" id="color-text" data-colorkey="text">
+                    </label>
+                    <label class="color-item">
+                        <span>Success</span>
+                        <input type="color" id="color-success" data-colorkey="success">
+                    </label>
+                    <label class="color-item">
+                        <span>Warning</span>
+                        <input type="color" id="color-warning" data-colorkey="warning">
+                    </label>
+                    <label class="color-item">
+                        <span>Danger</span>
+                        <input type="color" id="color-danger" data-colorkey="danger">
+                    </label>
+                </div>
+            </div>
+
+            <!-- Bar Settings -->
+            <div class="settings-section">
+                <h2>Bar Appearance</h2>
+                <div class="slider-group">
+                    <label class="slider-item">
+                        <span>Width: <span id="bar-width-val">180</span>px</span>
+                        <input type="range" id="bar-width" min="100" max="300" value="180">
+                    </label>
+                    <label class="slider-item">
+                        <span>Height: <span id="bar-height-val">8</span>px</span>
+                        <input type="range" id="bar-height" min="4" max="20" value="8">
+                    </label>
+                    <label class="slider-item">
+                        <span>Radius: <span id="bar-radius-val">4</span>px</span>
+                        <input type="range" id="bar-radius" min="0" max="20" value="4">
+                    </label>
+                    <label class="toggle-item">
+                        <input type="checkbox" id="toggle-fade" data-bar="animateFade">
+                        <span>Fade bars when inactive</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Minimap -->
+            <div class="settings-section">
+                <h2>Minimap</h2>
+                <div class="radio-group">
+                    <label><input type="radio" name="minimap-size" value="small"> Small</label>
+                    <label><input type="radio" name="minimap-size" value="normal" checked> Normal</label>
+                    <label><input type="radio" name="minimap-size" value="large"> Large</label>
+                </div>
+            </div>
+
+            <!-- Speed Unit -->
+            <div class="settings-section">
+                <h2>Speedometer Unit</h2>
+                <div class="radio-group">
+                    <label><input type="radio" name="speed-unit" value="mph" checked> MPH</label>
+                    <label><input type="radio" name="speed-unit" value="kmh"> KM/H</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-footer">
+            <button class="btn-secondary" id="reset-btn">Reset to Defaults</button>
+            <button class="btn-primary" id="save-btn">Save Settings</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
